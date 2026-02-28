@@ -171,4 +171,4 @@ keybind = super+k=clear_screen
 # performable: クリップボードにテキストがある場合は通常のテキストペースト、
 # 画像のみの場合は「実行不可」と判断してキーをアプリ側（Claude Code等）に素通しさせる。
 # Ghostty が OSC 5522 未対応のための暫定対応。動作しない場合は削除してよい。
-keybind = performable:super+v=paste_from_clipboard
+# keybind = performable:super+v=paste_from_clipboard
