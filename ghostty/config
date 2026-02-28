@@ -1,0 +1,174 @@
+# ============================================================
+# Ghostty 設定ファイル
+# テーマ: TokyoNight / フォント: Monaco / シェル: zsh
+# 配置先: ~/.config/ghostty/config
+# ============================================================
+
+
+# ──────────────────────────────────────────
+# シェル設定
+# ──────────────────────────────────────────
+
+# /bin/zsh は Ghostty が渡す --posix フラグを認識しないため none に設定
+# Homebrew zsh（/opt/homebrew/bin/zsh）に切り替えた場合は detect に戻す
+shell-integration = none
+# shell-integration-features = cursor,sudo,title
+
+
+# ──────────────────────────────────────────
+# フォント設定
+# ──────────────────────────────────────────
+
+# 使用するフォントファミリー（macOS 標準フォントのため追加インストール不要）
+font-family = "Monaco"
+
+# フォントサイズ（pt 単位）
+font-size = 15
+
+# セルの高さ調整（行間スペース）。パーセント指定で元の高さからの増減量を指定する
+# 例: 20%=20%増、-10%=10%減、0%=デフォルト
+# ※ line-height は Ghostty では未対応。adjust-cell-height を使う
+adjust-cell-height = 10%
+
+# ──────────────────────────────────────────
+# カラーテーマ設定
+# ──────────────────────────────────────────
+
+# Ghostty ビルトインテーマ（ghostty +list-themes で一覧確認）
+# TokyoNight: Warp に近いクールダーク系。背景 #1a1b2e、青みのあるアクセント
+theme = "TokyoNight"
+
+# 背景の透過度（0.0=完全透明 〜 1.0=不透明）
+background-opacity = 0.90
+
+# 背景のぼかし半径（background-opacity と組み合わせてガラス感を出す）
+background-blur-radius = 20
+
+# カーソルの形状（bar=縦棒、block=ブロック、underline=下線）
+cursor-style = bar
+
+# カーソルを点滅させる
+cursor-style-blink = true
+
+# カーソルの色（TokyoNight の Blue）
+cursor-color = #7aa2f7
+
+# テキスト選択時の背景色（TokyoNight の selection）
+# #283457 は背景色 #1a1b2e に近すぎて判別しにくいため、
+# TokyoNight 公式の selection カラー #33467C に変更
+selection-background = #4f6fd4
+
+# テキスト選択時の前景色（TokyoNight の foreground）
+selection-foreground = #c0caf5
+
+
+# ──────────────────────────────────────────
+# ウィンドウ設定
+# ──────────────────────────────────────────
+
+# ネイティブウィンドウ装飾（影・角丸など）を有効にする
+window-decoration = true
+
+# ウィンドウ左右の内側余白（px）
+window-padding-x = 12
+
+# ウィンドウ上下の内側余白（px）
+window-padding-y = 8
+
+# ペイン分割時にパディングを均等に配分する
+window-padding-balance = true
+
+# 初期ウィンドウサイズ（文字数）
+window-width = 120
+window-height = 40
+
+# タイトルバースタイル
+# native: 通常のタイトルバー / transparent: ボタンのみ / tabs: タブをタイトルバーに統合 / hidden: 非表示
+# tabs: 閉じるボタン等が見えて操作しやすく、タブもタイトルバーに統合される
+# 注意: Ghostty の仕様でタブが1枚のときはタブバーが非表示になる（常時表示は非対応）
+macos-titlebar-style = tabs
+
+# macOS の Option キーを Alt キーとして扱う
+# Claude Code・vim・emacs のキーバインドに必須
+macos-option-as-alt = true
+
+# ── ワーキングディレクトリ継承 ──
+# 新規タブを開くとき、現在のタブの CWD を引き継ぐ（PR #9158 で追加された設定）
+# ※ 現在の Ghostty バージョンでは未対応フィールドのためコメントアウト
+# tab-inherit-working-directory = true
+
+# ペイン分割時に現在のペインの CWD を引き継ぐ
+# ※ 同上
+# split-inherit-working-directory = true
+
+
+# ──────────────────────────────────────────
+# ターミナル動作設定
+# ──────────────────────────────────────────
+
+# スクロールバックバッファの行数（長い git log や Claude Code 出力を遡れるように多めに確保）
+scrollback-limit = 100000
+
+# タイピング中はマウスカーソルを非表示にする
+mouse-hide-while-typing = true
+
+# マウスオーバーでペインのフォーカスを自動切り替え（クリック不要）
+focus-follows-mouse = true
+
+# テキストを選択すると自動的にクリップボードにコピーする
+copy-on-select = clipboard
+
+# 出力中の URL をクリック可能にする（GitHub の PR リンクなどをそのまま開ける）
+link-url = true
+
+
+# ──────────────────────────────────────────
+# キーバインド設定
+# ──────────────────────────────────────────
+
+# ── タブ操作 ──
+# 新しいタブを開く
+keybind = super+t=new_tab
+# 現在のタブを閉じる（ペイン分割中でも最後の1枚ならタブごと閉じる）
+keybind = super+w=close_surface
+# 次のタブへ移動
+keybind = super+shift+]=next_tab
+# 前のタブへ移動
+keybind = super+shift+[=previous_tab
+
+# ── ペイン分割 ──
+# 右側に縦分割
+keybind = super+d=new_split:right
+# 下側に横分割
+keybind = super+shift+d=new_split:down
+# ペインを閉じる（close_surface と同じだが分割中は現在のペインのみ閉じる）
+keybind = super+ctrl+w=close_surface
+
+# ── ペインフォーカス移動（Cmd+Alt+矢印）──
+keybind = super+alt+left=goto_split:left
+keybind = super+alt+right=goto_split:right
+keybind = super+alt+up=goto_split:top
+keybind = super+alt+down=goto_split:bottom
+
+# ── ペインリサイズ（Cmd+Ctrl+矢印）──
+keybind = super+ctrl+left=resize_split:left,20
+keybind = super+ctrl+right=resize_split:right,20
+keybind = super+ctrl+up=resize_split:up,20
+keybind = super+ctrl+down=resize_split:down,20
+
+# ペインサイズを均等に揃える
+keybind = super+ctrl+equal=equalize_splits
+
+# ── フォントサイズ ──
+keybind = super+equal=increase_font_size:1
+keybind = super+minus=decrease_font_size:1
+keybind = super+zero=reset_font_size
+
+# 画面クリア（Claude Code のセッション区切りや作業の気分転換に便利）
+keybind = super+k=clear_screen
+
+# ── 画像ペースト（実験的回避策）──
+# performable: クリップボードにテキストがある場合は通常のテキストペースト、
+# 画像のみの場合は「実行不可」と判断してキーをアプリ側（Claude Code等）に素通しさせる。
+# Ghostty が OSC 5522 未対応のための暫定対応。動作しない場合は削除してよい。
+keybind = performable:super+v=paste_from_clipboard
