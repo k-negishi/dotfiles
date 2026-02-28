@@ -1,0 +1,20 @@
+# 機種固有・秘匿ファイル（各マシンに直置きするもの）
+.zshrc.local
+
+# 秘匿情報ファイル（APIキー・トークン・環境変数）
+# これらのファイルは誤ってコミットしないよう除外する
+# 実際の値は .zshrc.local に集約し、例示用の .example ファイルのみコミット対象
+.env
+.env.*
+!.env.example
+*.secret
+*.token
+*.key
+*_credentials
+
+# macOS
+.DS_Store
+/.idea/
+
+# Claude Code のローカル設定（マシン固有の許可設定など）
+.claude/
