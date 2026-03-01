@@ -50,14 +50,10 @@ alias ..='cd ..'
 
 # ── Powerlevel10k テーマ ────────────────────────────────
 # brew install powerlevel10k でインストール。
-# Apple Silicon (/opt/homebrew) と Intel (/usr/local) の両方に対応。
-for _p10k_prefix in /opt/homebrew /usr/local; do
-  if [[ -f "$_p10k_prefix/share/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
-    source "$_p10k_prefix/share/powerlevel10k/powerlevel10k.zsh-theme"
-    break
-  fi
-done
-unset _p10k_prefix
+# Apple Silicon 前提で /opt/homebrew を使用。
+if [[ -f /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme ]]; then
+  source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+fi
 
 # p10k の設定ファイル（p10k configure で対話生成 → dotfiles/zsh/.p10k.zsh に保存）
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -67,35 +63,40 @@ unset _p10k_prefix
 # zsh/fish/bash それぞれの補完定義を統合して使うため、compinit 単独より
 # 多くのコマンドの引数・サブコマンドを高精度に補完できる。
 # インストール: brew install carapace
+# 全ターミナルで process substitution ではなく、生成済みスクリプトを読む。
 export CARAPACE_BRIDGES='zsh,fish,bash'
-source <(carapace _carapace)
+if [[ -r /Users/Kei/dotfiles/zsh/.carapace.generated.zsh ]]; then
+  source /Users/Kei/dotfiles/zsh/.carapace.generated.zsh
+fi
 
 # ── zsh-autosuggestions ───────────────────────────────────
 # Fish 風のインライン補完。入力中にゴーストテキストでサジェストを表示する。
 # → キーまたは Ctrl+E で確定する。
 # インストール: brew install zsh-autosuggestions
-# Apple Silicon (/opt/homebrew) と Intel (/usr/local) の両方に対応（p10k と同じ方式）
-for _as_prefix in /opt/homebrew /usr/local; do
-  if [[ -f "$_as_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-    source "$_as_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-    break
-  fi
-done
-unset _as_prefix
+# Apple Silicon 前提で /opt/homebrew を使用。
+if [[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
 # strategy の優先順:
 #   1. history   - まず入力履歴から検索（例: tree → tree -L 3）
 #   2. completion - 履歴にない場合は carapace 経由で補完（例: pki → pkill）
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+if [[ -r /Users/Kei/dotfiles/zsh/.carapace.generated.zsh ]]; then
+  ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+else
+  ZSH_AUTOSUGGEST_STRATEGY=(history)
+fi
 # サジェストテキストの色（fg=244 は256色の中間グレー。暗い背景でも読みやすい）
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
 
 # ── Ghostty shell-integration ────────────────────────────
 # タブ・ペイン分割時の CWD 引き継ぎ、プロンプトマーク、コマンドタイトルなどを有効にする。
 # Ghostty 起動時に $GHOSTTY_RESOURCES_DIR が設定されている場合のみ読み込む。
-if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+if [[ -n $GHOSTTY_RESOURCES_DIR && -r "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration ]]; then
   source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
 fi
 
 # ── 機種固有設定の読み込み ────────────────────────────────
 # brew, nvm, PC固有設定などはこちらに書く
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+if [ -f ~/.zshrc.local ]; then
+  source ~/.zshrc.local
+fi
