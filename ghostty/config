@@ -9,21 +9,23 @@
 # シェル設定
 # ──────────────────────────────────────────
 
-# /bin/zsh は Ghostty が渡す --posix フラグを認識しないため none に設定
-# Homebrew zsh（/opt/homebrew/bin/zsh）に切り替えた場合は detect に戻す
-shell-integration = none
-# shell-integration-features = cursor,sudo,title
+# CWD 継承やプロンプトマークに必要なため有効化する
+# zsh 側では重い初期化を整理し、shell integration と共存できる状態にしてある
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
 
 
 # ──────────────────────────────────────────
 # フォント設定
 # ──────────────────────────────────────────
 
-# 使用するフォントファミリー（macOS 標準フォントのため追加インストール不要）
-font-family = "Monaco"
+# 使用するフォントファミリー
+# Ricty Diminished: Inconsolata（英数字） + Migu 1M（日本語）の合成フォント
+# 日本語と英数字が 2:1 の幅比で設計されており、混在テキストが自然に表示される
+font-family = "Ricty Diminished"
 
 # フォントサイズ（pt 単位）
-font-size = 15
+font-size = 16
 
 # セルの高さ調整（行間スペース）。パーセント指定で元の高さからの増減量を指定する
 # 例: 20%=20%増、-10%=10%減、0%=デフォルト
@@ -39,7 +41,7 @@ adjust-cell-height = 10%
 theme = "TokyoNight"
 
 # 背景の透過度（0.0=完全透明 〜 1.0=不透明）
-background-opacity = 0.90
+background-opacity = 0.95
 
 # 背景のぼかし半径（background-opacity と組み合わせてガラス感を出す）
 background-blur-radius = 20
@@ -163,6 +165,12 @@ keybind = super+ctrl+equal=equalize_splits
 keybind = super+equal=increase_font_size:1
 keybind = super+minus=decrease_font_size:1
 keybind = super+zero=reset_font_size
+
+# ── Shift+Enter で改行挿入 ──
+# Shift+Enter で \n（LF, 0x0A）を送信する。
+# 通常の Enter は \r（CR, 0x0D）を送るため、Claude Code 等のアプリが
+# \r=送信 / \n=改行挿入 として区別できる。zsh 側の bindkey 設定は不要。
+keybind = shift+enter=text:\n
 
 # 画面クリア（Claude Code のセッション区切りや作業の気分転換に便利）
 keybind = super+k=clear_screen
