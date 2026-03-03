@@ -88,6 +88,27 @@ fi
 # サジェストテキストの色（fg=244 は256色の中間グレー。暗い背景でも読みやすい）
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
 
+# ── fzf ──────────────────────────────────────────────────
+# ファジーファインダー。Ctrl+R で history を fzf UI で検索できるようにする。
+# あわせて Ctrl+T（ファイル検索→コマンドライン挿入）・Alt+C（cd 先ディレクトリ検索）も有効になる。
+# インストール: brew install fzf
+# zsh-autosuggestions の後にロードすることで bindkey の競合を防ぐ。
+if command -v fzf &>/dev/null; then
+  eval "$(fzf --zsh)"
+
+  # fzf UI の外観（TokyoNight テーマに合わせた配色）
+  export FZF_DEFAULT_OPTS="
+    --height=40%
+    --layout=reverse
+    --border=rounded
+    --color=bg+:#1e2030,bg:#1e2030,spinner:#82aaff,hl:#82aaff
+    --color=fg:#c8d3f5,header:#82aaff,info:#82aaff,pointer:#82aaff
+    --color=marker:#82aaff,fg+:#c8d3f5,prompt:#82aaff,hl+:#82aaff"
+
+  # Ctrl+R: 時系列ソートをデフォルトに、完全一致モードを有効化
+  export FZF_CTRL_R_OPTS="--sort --exact"
+fi
+
 # ── Ghostty shell-integration ────────────────────────────
 # タブ・ペイン分割時の CWD 引き継ぎ、プロンプトマーク、コマンドタイトルなどを有効にする。
 # Ghostty 起動時に $GHOSTTY_RESOURCES_DIR が設定されている場合のみ読み込む。

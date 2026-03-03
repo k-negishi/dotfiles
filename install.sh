@@ -1,12 +1,25 @@
 #!/bin/bash
-# dotfiles シンボリックリンク作成スクリプト
+# dotfiles セットアップスクリプト
 # 使い方: bash ~/dotfiles/install.sh
 #
-# 既存ファイルは .bak にリネームしてバックアップする
+# 1. Homebrew パッケージの一括インストール（Brewfile 使用・冪等）
+# 2. シンボリックリンクの作成（既存ファイルは .bak にバックアップ）
 
 set -eu
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# ── Homebrew パッケージのインストール ─────────────────────
+# brew bundle はインストール済みのパッケージをスキップするため冪等に動作する
+if command -v brew &>/dev/null; then
+  echo "Installing Homebrew packages..."
+  brew bundle --file="$DOTFILES_DIR/Brewfile"
+  echo ""
+else
+  echo "Warning: Homebrew が見つかりません。先に https://brew.sh からインストールしてください。"
+  echo "         パッケージのインストールをスキップして、シンボリックリンクの作成だけ行います。"
+  echo ""
+fi
 
 link() {
   local src="$1"
